@@ -27,6 +27,7 @@
 
 #include <sys/time.h>
 
+
 /* The argument now should be a double (not a pointer to a double) */
 #define GET_TIME(now) { \
    struct timeval t; \
