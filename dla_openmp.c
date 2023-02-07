@@ -12,6 +12,7 @@ int thread_count; // numero di thread
 void gen_particles_openMP(int *seed, int num_particles, particle *particles_list, int n, int m);      // Generatore di particelle
 void start_DLA(int num_particles, particle *particles_list, int n, int m, int **matrix, int horizon); // Funzione DLA
 
+
 /*
  * Genera una lista di particelle con posizione casuale.
  * La funzione modifica la lista di particelle.
