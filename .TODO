@@ -1,2 +1,0 @@
-***#DONE*** liberare i puntatori e le memorie allocate, riferito a particles and path.
-__#DROPPED__ reallocare spazio quando la particella si stuck per evitare spreco di memoria nei path. \
