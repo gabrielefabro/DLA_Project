@@ -318,7 +318,6 @@ int check_position(int n, int m, int **matrix, particle *p, stuckedParticles *sp
     return 0;
 }
 
-
 /*
  * Controlla tutti i possibili movimenti che potrebbe fare la particella in una superficie 2D.
  * @param n: numero di righe della matrice
