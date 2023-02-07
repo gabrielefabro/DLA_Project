@@ -9,7 +9,6 @@
 *.mp4
 *.bmp
 .env
-paths.txt
-matrix.txt
+.txt
 __pycache__
 output
