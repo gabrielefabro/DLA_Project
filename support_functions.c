@@ -65,71 +65,6 @@ particle sp_pop(stuckedParticles *sp);
 int sp_destroy(stuckedParticles *sp);
 void createImage(gdImagePtr img, int width, int height, int **matrix, int *colors, char *filename);
 
-// nodo della lista
-typedef struct node
-{
-    particle p;
-    struct node *next;
-    struct node *prev;
-} node;
-
-typedef struct
-{
-    struct node *head;
-    struct node *tail;
-    int size;
-} list;
-
-void init_list(list *l);
-void append(list *l, particle p);
-particle pop(list *l);
-
-void init_list(list *l)
-{
-    l->head = NULL;
-    l->tail = NULL;
-    l->size = 0;
-}
-
-void append(list *l, particle p)
-{
-    node *new_node = (node *)malloc(sizeof(node));
-    new_node->p = p;
-    new_node->next = NULL;
-    new_node->prev = NULL;
-
-    if (l->head == NULL)
-    {
-        l->head = new_node;
-        l->tail = new_node;
-    }
-    else
-    {
-        l->tail->next = new_node;
-        new_node->prev = l->tail;
-        l->tail = new_node;
-    }
-    l->size++;
-}
-
-particle pop(list *l)
-{
-    if (l->size == 0)
-    {
-        return (particle){NULL, 0, 0, 0};
-    }
-    particle p = l->tail->p;
-    node *tmp = l->tail;
-    l->tail = l->tail->prev;
-    if (l->tail != NULL)
-    {
-        l->tail->next = NULL;
-    }
-    free(tmp);
-    l->size--;
-    return p;
-}
-
 /*
  * Inizializza la struttura stuckedParticles.
  * @param stuckedParticles struttura da inizializzare
@@ -317,6 +252,7 @@ int check_position(int n, int m, int **matrix, particle *p, stuckedParticles *sp
     }
     return 0;
 }
+
 
 /*
  * Controlla tutti i possibili movimenti che potrebbe fare la particella in una superficie 2D.
