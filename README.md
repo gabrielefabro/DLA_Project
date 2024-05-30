@@ -1,52 +1,66 @@
 # DLA Simulator
-## Introduzione
-DLA Simulator è un programma in C per simulare l'aggregazione di particelle che si muovono seguendo un moto Browniano in una superficie 2D. \
-Presentiamo più implementazioni, una single core, una multi thread usando la libreria pthread e una multi thread usando OpenMP. \
-Inoltre le nostre implementazioni prevedono il render delle fasi della simulazioni per mostrare come si aggregano le particelle.
-## Come avviarlo
-**Il progetto è valido solo se fatto girare su Linux, non si assicura il suo funzionamento su altre piattaforme visto l'utilizzo di librerie multi thread ed altro** \
-Dopo aver clonato la repository è possibile avviare il programma a patto che le dipendenze vengano rispettate. (Vedi sezione <a href="Dipendenze"> Dipendenze</a>)
-Quindi per compilarlo basta eseguire il seguente comando:
 
-    gcc -o dla_single_thread.out dla_single_thread.c -lgd
+## Introduction
 
-Dove _-lgd_ è l'opzione necessaria per specificare la libreria GD che usiamo per il render delle immagini. \
-\
-Per le versioni multi thread va aggiunta l'opzione:
+DLA Simulator is a C program that simulates the aggregation of particles moving in a 2D surface following Brownian motion. We present multiple implementations: single core, multi-thread using the pthread library, and multi-thread using OpenMP. Our implementations also render the simulation stages to show how particles aggregate.
 
- - `-fopenmp` _per l'implementazione con OpenMP_
- - `-pthread` _per l'implementazione con pthread_
+## How to Run
 
-Per avviare la versione single thread basta eseguire il seguente comando e settare i giusti argomenti:
+**Note: This project is intended to run on Linux. Compatibility with other platforms is not guaranteed due to the use of multi-threading libraries and other dependencies.**
 
- - n,m _grandezza matrice, righe e colonne rispettivamente_
- - num_particles _numero di particelle da istanziare_
- - x,y _posizione del seed con le rispettive coordinate nella matrice_ [***opzionale***] \ Se non specificato sarà generato casualmente all'interno della superficie.
+After cloning the repository, you can run the program, provided the dependencies are met. (See the [Dependencies](#dependencies) section.)
 
-`./dla_single_thread.out n,m num_particles x,y`
+To compile, use the following command:
 
-Per le versioni multi thread:
+```sh
+gcc -o dla_single_thread.out dla_single_thread.c -lgd
+```
 
- - OpenMP - `./dla_openmp.out n,m num_particles [-OPTIONS]]` 
- - pthread - `./dla_pthread.out n,m num_particles [-OPTIONS]` \
+Here, `-lgd` specifies the GD library, which we use for image rendering.
 
-Dove n,m sono le dimensioni della matrice, num_particles è il numero di particelle da istanziare. \
-Le opzioni sono:
- - -n _numero di thread da usare_ [default 4]
- - -s _posizione del seed_ [default generato casualmente]
- - -t _orizzonte di simulazione_ [default 1000]
+For multi-threaded versions, add the following options:
 
-## Come funziona
-Il programma è molto semplice, le tre implementazioni differiscono di poco, l'idea di fondo è sempre la stessa.
-L' inizializzazione prevede il salvataggio dei dati passati come argomento al programma, l'allocazione della memoria per la matrice, che viene allocata e riempita interamente da 0, l'allocazione della memoria per la lista di particelle, queste vengono generate con posizione casuale. Dopo di che inizia la simulazione vera e propria. \
-Tutta la simulazione è scandita da intervalli (l'unità di tempo la lasciamo scegliere all'utente), in ognuno di questi intervalli si scorre tutta la lista di particelle, e per ogni particella si eseguono due operazioni:
+- `-fopenmp` for the OpenMP implementation
+- `-pthread` for the pthread implementation
 
- 1. Si controllano le celle adiacenti alla particella, nel caso sia presente una particella aggregata (o il seed iniziale) allora la particella in questione si aggregherà a sua volta e non verrà più considerata, in caso contrario si va alla seconda operazione.
- 2. Si muove la particella di un fattore casuale in una direzione casuale cercando di simulare al meglio un moto Browniano. Quindi si ricomincia dal punto 1. 
+To run the single-threaded version, execute the command below with the appropriate arguments:
 
-Al termine dell'orizzonte di simulazione scelto viene salvato il risultato sottoforma di immagine in formato jpg, dopo di che viene liberata tutta la memoria allocata e nel caso delle implementazioni multi thread vengono eseguite le dovute operazioni di finalizzazione.
+- `n,m` - matrix size, rows, and columns respectively
+- `num_particles` - number of particles to instantiate
+- `x,y` - seed position with respective coordinates in the matrix [*optional*] \ If not specified, it will be randomly generated within the surface.
 
-## Dipendenze
-Per il render delle immagini in C abbiamo usato: [GD Graphics Library (libgd.github.io)](https://libgd.github.io/)
-Per installarla su Ubuntu:
-`sudo apt install libgd-dev`
+```sh
+./dla_single_thread.out n,m num_particles x,y
+```
+
+For multi-threaded versions:
+
+- OpenMP: `./dla_openmp.out n,m num_particles [-OPTIONS]`
+- pthread: `./dla_pthread.out n,m num_particles [-OPTIONS]`
+
+Where `n,m` are the matrix dimensions, and `num_particles` is the number of particles to instantiate.
+
+Options are:
+
+- `-n` - number of threads to use [default: 4]
+- `-s` - seed position [default: randomly generated]
+- `-t` - simulation horizon [default: 1000]
+
+## How It Works
+
+The program's core logic remains consistent across all three implementations, with minor differences. The initialization phase involves storing the command-line arguments, allocating memory for the matrix (filled with zeros), and allocating memory for the particle list, with particles generated at random positions. The simulation then proceeds as follows:
+
+1. **Check Adjacent Cells**: For each particle, check the adjacent cells. If an aggregated particle (or the initial seed) is found, the current particle aggregates and is no longer considered. Otherwise, proceed to step 2.
+2. **Move Particle**: The particle moves in a random direction to simulate Brownian motion. Then, return to step 1.
+
+The simulation continues for the specified horizon, after which the result is saved as a JPEG image. All allocated memory is freed, and necessary finalization steps are performed for multi-threaded implementations.
+
+## Dependencies
+
+For image rendering in C, we use: [GD Graphics Library](https://libgd.github.io/).
+
+To install it on Ubuntu:
+
+```sh
+sudo apt install libgd-dev
+```
